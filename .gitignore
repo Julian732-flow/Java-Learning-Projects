@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
@@ -5,6 +6,15 @@ out/
 .kotlin
 
 ### Eclipse ###
+=======
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+>>>>>>> 3b7a3bd (Avance: búsqueda de datos completos de la serie con iteración de temporadas)
 .apt_generated
 .classpath
 .factorypath
@@ -12,9 +22,18 @@ out/
 .settings
 .springBeans
 .sts4-cache
+<<<<<<< HEAD
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
+=======
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+>>>>>>> 3b7a3bd (Avance: búsqueda de datos completos de la serie con iteración de temporadas)
 
 ### NetBeans ###
 /nbproject/private/
@@ -22,9 +41,18 @@ bin/
 /dist/
 /nbdist/
 /.nb-gradle/
+<<<<<<< HEAD
 
 ### VS Code ###
 .vscode/
 
 ### Mac OS ###
 .DS_Store
+=======
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+>>>>>>> 3b7a3bd (Avance: búsqueda de datos completos de la serie con iteración de temporadas)
