@@ -25,11 +25,14 @@ public class ScreenmatchApplication implements CommandLineRunner {
     //Sobrescribimos con el método Run que nos sugirio el idea con el CommandLineRunner
     @Override
     public void run(String... args) throws Exception {
-//        Principal principal = new Principal();
-//        principal.muestraELMenu();
+        Principal principal = new Principal();
+        principal.muestraELMenu();
 
-        EjemploEstreams ejemploEstreams = new EjemploEstreams();
-        ejemploEstreams.muestraEjemplo();
+//        <-----------   Se comento por lo mismo poruqe es un ejemplo
+
+//        EjemploEstreams ejemploEstreams = new EjemploEstreams();
+//        ejemploEstreams.muestraEjemplo();    <----------
+
 
     }
 }
