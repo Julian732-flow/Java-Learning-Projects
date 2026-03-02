@@ -24,7 +24,7 @@ public class Principal {
         System.out.println("Por favor escribe el nombre de la serie que deseas buscar");
 //        Busca los datos generales de las series
         var nombreSerie = teclado.nextLine();
-        var json = consumoApi.obtenerDatos(URL_BASE + nombreSerie.replace(" ","+") + API_KEY);
+        var json = consumoApi.obtenerDatos(URL_BASE + nombreSerie.replace(" ", "+") + API_KEY);
         var datos = conversor.obtenerDatos(json, DatosSerie.class);
         System.out.println(datos);
 
@@ -33,7 +33,7 @@ public class Principal {
         List<DatosTemporadas> temporadas = new ArrayList<>();
         // Ciclo que recorre todas las temporadas y consulta datos de la API
         for (int i = 1; i <= datos.totalDeTemporadas(); i++) {
-            json = consumoApi.obtenerDatos(URL_BASE + nombreSerie.replace(" ","+") + "&Season=" + i + API_KEY);
+            json = consumoApi.obtenerDatos(URL_BASE + nombreSerie.replace(" ", "+") + "&Season=" + i + API_KEY);
             var datosTemporadas = conversor.obtenerDatos(json, DatosTemporadas.class);
             temporadas.add(datosTemporadas);
         }
@@ -60,15 +60,23 @@ public class Principal {
 // estamos colocando todos estos datos en una lista mutable
                 .collect(Collectors.toList());
 
-//        Top 5 episodios
-        System.out.println("Top 5 episodios");
-        datosEpisodios.stream()
-                .filter(e->!e.evaluacion().equalsIgnoreCase("N/A"))//1. En esta linea filtramos los datos de la evaluacion que aparecian con N/A a darnos el valor de la calificación
-        // 2. Ordenación: Se aplica un comparador basado en el atributo 'evaluacion'.
-        // Se utiliza .reversed() para obtener un orden descendente (de mayor a menor puntaje).
-                .sorted(Comparator.comparing(DatosEpisodio::evaluacion).reversed())
-                .limit(5)
-                .forEach(System.out::println);
+//        //        Top 5 episodios
+//        System.out.println("Top 5 episodios");
+//        datosEpisodios.stream()
+//                .filter(e -> !e.evaluacion().equalsIgnoreCase("N/A"))//1. En esta linea filtramos los datos de la evaluacion que aparecian con N/A a darnos el valor de la calificación
+//                .peek(e -> System.out.println("Primer filtro (N/A)" + e))
+//                // peek = "una ojeadita": como un supervisor en la línea de ensamblaje,
+//                // no cambia nada, solo nos deja ver cómo van los datos en ese paso.
+//
+//                // 2. Ordenación: Se aplica un comparador basado en el atributo 'evaluacion'.
+//                // Se utiliza .reversed() para obtener un orden descendente (de mayor a menor puntaje).
+//                .sorted(Comparator.comparing(DatosEpisodio::evaluacion).reversed())
+//                .peek(e -> System.out.println("Segundo ordenadión (M>m)" + e))
+//                .map(e -> e.titulo().toUpperCase())
+//                .peek(e -> System.out.println("Primer filtro (N/A)" + e))
+//                .peek(e -> System.out.println("Tercer filtro Mayúsculas (m/M)" + e))
+//                .limit(5)
+//                .forEach(System.out::println);
 
         // Convertimos los datos de las temporadas a una lista de objetos tipo Episodio
         List<Episodio> episodios = temporadas.stream()
@@ -79,27 +87,65 @@ public class Principal {
                         /* Mapeamos: Por cada dato suelto, creamos un objeto Episodio real.
                          * Le pasamos el número de temporada para que el episodio sepa a cuál pertenece.
                          */
-                        .map(d->new Episodio(t.numero(),d)))
+                        .map(d -> new Episodio(t.numero(), d)))
                 // Guardamos todo el resultado en una lista común
                 .collect(Collectors.toList());
-        episodios.forEach(System.out::println);
+//        episodios.forEach(System.out::println);
 
 //        Busqu3eda de episodios a patir de x año
-        System.out.println("Indica el año a partir del cual deseas ver los episodios: ");
-        var fecha = teclado.nextInt();
-        teclado.nextLine();
+//        System.out.println("Indica el año a partir del cual deseas ver los episodios: ");
+//        var fecha = teclado.nextInt();
+//        teclado.nextLine();
 
-        LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
+//        LocalDate fechaBusqueda = LocalDate.of(fecha, 1, 1);
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-        episodios.stream()
-                .filter(e ->e.getFechaDeLanzamiento() != null && e.getFechaDeLanzamiento().isAfter(fechaBusqueda))
-                .forEach(e -> System.out.println(
-                  "Temporada" + e.getTemporada() +
-                    "Episodio" + e.getTitulo() +
-                    "Fecha de lanzamiento" + e.getFechaDeLanzamiento().format(dtf)
-                ));
+//        episodios.stream()
+//                .filter(e ->e.getFechaDeLanzamiento() != null && e.getFechaDeLanzamiento().isAfter(fechaBusqueda))
+//                .forEach(e -> System.out.println(
+//                  "Temporada" + e.getTemporada() +
+//                    "Episodio" + e.getTitulo() +
+//                    "Fecha de lanzamiento" + e.getFechaDeLanzamiento().format(dtf)
+//                ));
+        //Busca episodios por un pedazo del título
+//        System.out.println("Por favor escriba el titulo del episodio que desea ver");
+//        var pedazoTitulo = teclado.nextLine();
+//        Optional<Episodio> episodioBuscado = episodios.stream()
+//                // el toUpperCase lo usamos para que pase el titulo a mayúsculas
+//                .filter(e -> e.getTitulo().toUpperCase().contains(pedazoTitulo.toUpperCase()))
+//                //aquí vamos a mostrar la primera coincidencia
+//                .findFirst();
+//        if (episodioBuscado.isPresent()) {
+//            System.out.println("Episodio encontrado");
+//            System.out.println("Los datos son: " + episodioBuscado.get());
+//        } else {
+//            System.out.println("Episodio no encontrado");
+//        }
+
+//        Otros tipos de colecciones ademas de las listas
+        //Creando un mapa de datos por temporada
+        // Yo quiero calcular el promedio de evaluaciones por temporada.
+        // Es como tener una caja de episodios y organizarla para saber el "sabor promedio" de cada grupo.
+        Map<Integer, Double> evaluacionesPorTemporada = episodios.stream()
+                // Calcula el promedio de evaluaciones por temporada
+                // ignorando episodios sin evaluación (> 0.0).
+                .filter(e->e.getEvaluacion() > 0.0)
+                // Me quedo solo con los episodios que tienen evaluación válida (descarto los que no sirven).
+                .collect(Collectors.groupingBy(Episodio::getTemporada,
+                        /* Agrupo los episodios por temporada (como separar frutas por tipo)
+                        y dentro de cada grupo calculo el promedio de evaluaciones (el sabor promedio de cada fruta)*/
+                        Collectors.averagingDouble(Episodio::getEvaluacion)));
+        System.out.println(evaluacionesPorTemporada);
+
+        //Trabajamos la clase "est" que es muy común en el ambito laboral
+        DoubleSummaryStatistics est = episodios.stream()
+                .filter(e -> e.getEvaluacion() > 0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getEvaluacion));
+        System.out.println("Media de las evaluaciones:" + est.getAverage());
+        System.out.println("Episodio mejor evaluado: " + est.getMax());
+        System.out.println("Episodio peor evaluado: " + est.getMin());
+
 
 
 
